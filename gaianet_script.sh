@@ -38,7 +38,7 @@ pkill screen
 
 python3 -m venv venv && source venv/bin/activate && 
 
-pip3 install cloudscraper
+pip install cloudscraper
 
 if [ ! -f "./account.txt" ]; then
   echo "Creating system file..."
