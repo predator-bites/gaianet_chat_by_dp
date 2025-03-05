@@ -33,18 +33,14 @@ sudo apt install python3.10-venv -y
 sudo apt install git -y 
 pkill screen
 
-screen -dmS gaianet_script bash -c "
 git clone https://github.com/0xtnpxsgt/bobobot.git && 
 
 mv bobobot gaianet_script && cd gaianet_script && 
 
 python3 -m venv venv && source venv/bin/activate && 
 
-pip3 install -r requirements.txt && 
+pip3 install -r requirements.txt 
 
-
-
-# Check if the Python script exists
 if [ ! -f "./account.txt" ]; then
   echo "Creating system file..."
   cat > "./account.txt" <<EOF
@@ -395,8 +391,7 @@ What is quantum cryptography?
 EOF
 fi
 
-python3 bot.py
-"
+screen -dmS gaianet_script bash -c "python3 bot.py"
 
 echo "Script for $DOMAIN is created successfully"
 echo " "
