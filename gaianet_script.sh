@@ -39,7 +39,7 @@ mv bobobot gaianet_script && cd gaianet_script &&
 
 python3 -m venv venv && source venv/bin/activate && 
 
-pip3 install -r requirements.txt 
+pip3 install -r cloudscraper
 
 if [ ! -f "./account.txt" ]; then
   echo "Creating system file..."
@@ -393,7 +393,10 @@ fi
 
 screen -dmS gaianet_script bash -c "python3 bot.py"
 
+
+
 echo "Script for $DOMAIN is created successfully"
 echo " "
-echo "Subscribe for author of autoinstaller"
+echo ""
+echo "Subscribe for author of autoinstaller:"
 echo -e "${NEON_BLUE}https://t.me/DropPredator${RESET}"
