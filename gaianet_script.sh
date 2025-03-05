@@ -1,25 +1,5 @@
 #!/bin/bash
 
-# Цветовые коды
-NEON_RED='\033[38;5;196m'
-NEON_BLUE='\033[38;5;45m'
-RESET='\033[0m'
-
-# Логотип
-logo() {
-    echo -e "
-${NEON_RED}  ____   ${NEON_BLUE}____
-${NEON_RED} |  _ \\  ${NEON_BLUE}|  _ \\
-${NEON_RED} | | | | ${NEON_BLUE}| |_) |
-${NEON_RED} | |_| | ${NEON_BLUE}|  __/
-${NEON_RED} |____/  ${NEON_BLUE}|_|
-${RESET}
-"
-}
-
-# Вызов логотипа
-logo
-echo -e "${NEON_BLUE}https://t.me/DropPredator${RESET}"
 
 read -p "Enter your domain name: " DOMAIN
 read -p "Enter your api key: " API_KEY
@@ -152,9 +132,3 @@ fi
 sleep 5 
 chmod +x bot.py 
 screen -dmS gaianet_script bash -c "source venv/bin/activate && python3 bot.py $THREADS_AMOUNT"
-
-echo "Script for $DOMAIN is created successfully"
-echo " "
-echo ""
-echo "Subscribe for author of autoinstaller:"
-echo -e "${NEON_BLUE}https://t.me/DropPredator${RESET}"
