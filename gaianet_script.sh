@@ -27,19 +27,18 @@ read -p "Enter your domain name: " DOMAIN
 read -p "Enter your api key: " API_KEY
 
 
+
+cd gaianet_script_folder
 #Installing dependencies 
 sudo apt install screen -y 
 sudo apt install python3.10-venv -y 
 sudo apt install git -y 
 pkill screen
 
-git clone https://github.com/0xtnpxsgt/bobobot.git && 
-
-mv bobobot gaianet_script && cd gaianet_script && 
 
 python3 -m venv venv && source venv/bin/activate && 
 
-pip3 install -r cloudscraper
+pip3 install cloudscraper
 
 if [ ! -f "./account.txt" ]; then
   echo "Creating system file..."
