@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-read -p "Enter your domain name: " DOMAIN
+read -p "Enter your domain name (example - droppredator): " DOMAIN
 read -p "Enter your api key: " API_KEY
 read -p "Enter amount of threads to run: " THREADS_AMOUNT
 
