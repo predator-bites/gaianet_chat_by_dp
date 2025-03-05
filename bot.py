@@ -4,11 +4,7 @@ import json
 import random
 import time
 import threading
-import shareithub
-from shareithub import shareithub
 
-
-shareithub()
 # Membaca API Key dan URL API dari file account.txt (multi API support)
 api_accounts = []
 with open('account.txt', 'r') as file:
