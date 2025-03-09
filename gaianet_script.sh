@@ -7,7 +7,7 @@ read -p "Enter amount of threads to run: " THREADS_AMOUNT
 
 # Installing dependencies 
 sudo apt install screen -y 
-sudo apt install python3.12-venv -y 
+sudo apt install python3.10-venv 
 sudo apt install git -y 
 
 # Kill only the specific screen session if it exists
