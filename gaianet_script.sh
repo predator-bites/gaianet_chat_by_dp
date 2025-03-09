@@ -9,7 +9,7 @@ read -p "Enter amount of threads to run: " THREADS_AMOUNT
 sudo apt install screen -y 
 sudo apt install python3.12-venv 
 sudo apt install git -y 
-
+sleep 3 
 # Kill only the specific screen session if it exists
 screen -X -S gaianet_script quit
 
