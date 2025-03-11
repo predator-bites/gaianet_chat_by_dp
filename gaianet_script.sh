@@ -9,11 +9,18 @@ read -p "Enter instance number (e.g., 1, 2, 3): " INSTANCE_NUM
 # Define folder name for the instance
 INSTANCE_FOLDER="gaianet_instance_${INSTANCE_NUM}"
 
-find . -type d -name "*gaianet_chat_by_dp*" -exec rm -rf {} + 2>/dev/null
 
 # Kill any existing screen session named "gaianet_script"
-screen -X -S gaianet_script quit 2>/dev/null
+echo "Checking for existing folders with 'gaianet_chat_by_dp'..."
+find . -type d -name "*gaianet_chat_by_dp*" -exec rm -rf {} + 2>/dev/null
+echo "All matching folders deleted."
 
+# Stop all screen sessions that contain "gaianet_script"
+echo "Stopping all running 'gaianet_script' screen sessions..."
+screen -ls | grep "gaianet_script" | awk '{print $1}' | while read session; do
+    screen -X -S "$session" quit
+done
+echo "All matching screen sessions stopped."
 # Create the instance directory if it doesn't exist
 mkdir -p "$INSTANCE_FOLDER"
 
@@ -26,7 +33,7 @@ SCREEN_NAME="gaianet_chat_${INSTANCE_NUM}"
 
 # Installing dependencies
 sudo apt install screen -y
-sudo apt install python3.10-venv -y
+sudo apt install python3-venv -y 
 sudo apt install git -y
 sleep 3
 
