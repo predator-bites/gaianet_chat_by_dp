@@ -493,10 +493,14 @@ import cloudscraper
 import json
 import random
 import time
-import threading
 import sys
+import logging
+from concurrent.futures import ThreadPoolExecutor
 
-# Read thread count from command-line
+# Setup logging
+logging.basicConfig(filename='script.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+
+# Read thread count
 try:
     num_threads = int(sys.argv[1])
     if num_threads < 1:
@@ -506,7 +510,7 @@ except (IndexError, ValueError):
     print("Invalid input. Please enter an integer.")
     exit()
 
-# Read API Keys from account file
+# Read API Keys
 api_accounts = []
 with open('account.txt', 'r') as file:
     for line in file:
@@ -518,7 +522,7 @@ if not api_accounts:
     print("Error: No valid API keys found in account.txt!")
     exit()
 
-# Read user messages from message file
+# Read messages
 with open('message.txt', 'r') as file:
     user_messages = [msg.strip() for msg in file.readlines() if msg.strip()]
 
@@ -529,57 +533,54 @@ if not user_messages:
 # Initialize Cloudscraper
 scraper = cloudscraper.create_scraper()
 
-# Function to send API request
+# Send API request
 def send_request(message):
-    while True:
+    retries = 0
+    max_retries = 5
+    while retries < max_retries:
         api_key, api_url = random.choice(api_accounts)
-
         headers = {
             'Authorization': f'Bearer {api_key}',
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-
         data = {
             "messages": [
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": message}
             ]
         }
-
         try:
-            response = scraper.post(api_url, headers=headers, json=data)
-
+            logging.info(f"Sending request to {api_url} with message: '{message}'")
+            response = scraper.post(api_url, headers=headers, json=data, timeout=60)
             if response.status_code == 200:
                 try:
                     response_json = response.json()
+                    logging.info(f"Success: {api_url} | Message: '{message}'")
                     print(f"✅ [SUCCESS] API: {api_url} | Message: '{message}'")
                     print(response_json)
-                    break
+                    return
                 except json.JSONDecodeError:
+                    logging.warning(f"Invalid JSON from {api_url}")
                     print(f"⚠️ [ERROR] Invalid JSON response! API: {api_url}")
             else:
+                logging.warning(f"Non-200 status: {response.status_code} from {api_url}")
                 print(f"⚠️ [ERROR] API: {api_url} | Status: {response.status_code} | Retrying in 2s...")
                 time.sleep(2)
-
         except Exception as e:
+            logging.error(f"Request failed: {api_url} | Error: {e}")
             print(f"❌ [REQUEST FAILED] API: {api_url} | Error: {e} | Retrying in 5s...")
             time.sleep(5)
+        retries += 1
+    logging.error(f"Max retries reached for message: '{message}'")
+    print(f"⛔ [GAVE UP] Max retries reached for message: '{message}'")
 
-# Start multiple threads
-def start_thread():
+# Start threads
+with ThreadPoolExecutor(max_workers=num_threads) as executor:
     while True:
         random_message = random.choice(user_messages)
-        send_request(random_message)
-
-threads = []
-for _ in range(num_threads):
-    thread = threading.Thread(target=start_thread, daemon=True)
-    threads.append(thread)
-    thread.start()
-
-for thread in threads:
-    thread.join()
+        executor.submit(send_request, random_message)
+        time.sleep(1)  # Prevent overwhelming the API
 EOF
 fi
 
